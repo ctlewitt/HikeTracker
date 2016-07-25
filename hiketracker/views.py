@@ -47,7 +47,7 @@ def hey_there():
 @app.route('/email_me')
 def email_me():
     msg = Message(
-                  sender=os.environ.get('MAIL_USERNAME'),
+                  sender=app.config.get('MAIL_USERNAME'),
                   recipients=[os.environ.get('TEST_RECIPIENT_EMAIL')]
                   )
     msg.body = "Hello.  This is my test email. Sent at: " + str(datetime.datetime.now())

@@ -17,7 +17,7 @@ app.config.update(
     MAIL_USE_SSL=True,
     MAIL_PASSWORD=os.environ.get('ADMIN_EMAIL_PASSWORD'),
     MAIL_USERNAME=os.environ.get('ADMIN_EMAIL_USERNAME'),
-    SQLALCHEMY_DATABASE_URI=os.environ.get('SQLALCHEMY_DATABASE_URI'),
+    DATABASE_URL=os.environ.get('DATABASE_URL'),
     MAPBOX_ID=os.environ.get('MAPBOX_ID'),
     MAPBOX_TOKEN=os.environ.get('MAPBOX_TOKEN'),
 )
@@ -28,7 +28,7 @@ app.login_manager.init_app(app)
 app.login_manager.login_view = "login"
 
 db = SQLAlchemy(app)
-engine = create_engine(os.environ.get('SQLALCHEMY_DATABASE_URI'))#, echo=True)
+engine = create_engine(os.environ.get('DATABASE_URL'))#, echo=True)
 
 app.mail = Mail(app)
 
