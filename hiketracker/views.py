@@ -41,7 +41,8 @@ def request_loader(request):
 
 @app.route('/')
 def hey_there():
-    return "HI THERE!!!!  YOU'RE DOING A GREAT JOB--I CAN TELL"
+    return "HI THERE!!!!  YOU'RE DOING A GREAT JOB--I CAN TELL<br>" \
+           ""
 
 
 @app.route('/email_me')
@@ -67,6 +68,9 @@ def login():
             <form action = "login?next='''+next+'''" method='POST'>
             <input type = 'text' name='email' id='email' placeholder='email'></input>
             <input type = 'submit' name='submit' value='Email Password'></input>
+            </form>
+            <form action = "new_user?next='''+next+'''" method='GET'>
+            <input type = 'submit' name='submit' value='New User'></input>
             </form>
             '''
     # POST
@@ -128,6 +132,26 @@ def login_followup():
                 return abort(400)
             return redirect(next or url_for('test_logged_in'))
     return redirect(url_for('test_logged_in'))
+
+
+@app.route('/new_user', methods=['GET', 'POST'])
+def add_new_user():
+    next = request.args.get('next') or ""
+    if request.method == 'GET':
+        return '''
+            <form action = "new_user?next='''+next+'''" method = 'POST' >
+                <input type = 'text' name = 'name' id = 'name' placeholder = 'name' > < / input >
+                <input type = 'text' name = 'email' id = 'email' placeholder = 'email' > < / input >
+                < input type = 'submit' name = 'submit' value = 'Email Password' > < / input >
+            </form >
+        '''
+    else: # POST
+        next = request.args.get('next') or ""
+        session = Session()
+        session.add(User(name=request.form["name"], email=request.form["email"]))
+        session.commit()
+        return redirect(url_for('login?next='+next))
+
 
 
 @app.route('/logout')
