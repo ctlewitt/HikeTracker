@@ -1,1 +1,1 @@
-web: gunicorn hiketracker.wsgi
+web: gunicorn hiketracker.wsgi --log-file -
