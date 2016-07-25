@@ -1,0 +1,1 @@
+Use this HikeTracker to submit and retrieve hikes that you like
