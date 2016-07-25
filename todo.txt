@@ -1,0 +1,21 @@
+# make a page just to search for trails by name
+# let users say what hikes they've hiked
+# let users make hiking wish lists
+# determine valid urls for next_is_valid()
+# search for paths
+# search by hike name
+# fix searches so you're just getting some results
+
+
+
+#notes:
+# must do when creating a table with arrays of enums, or just enums
+# t1.create(engine, checkfirst=True)
+
+
+
+# remember that hikes are made by people
+# remember that people have hiked hikes
+
+
+# move API user and password to config variables in flask

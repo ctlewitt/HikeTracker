@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Advanced Search</title>
+    <script src="https://code.jquery.com/jquery-3.0.0.js" integrity="sha256-jrPLZ+8vDxt2FnE1zvZXCkCcebI/C8Dt5xyaQBjxQIo=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://npmcdn.com/leaflet@0.7.7/dist/leaflet.css" />
+    <script src="https://npmcdn.com/leaflet@0.7.7/dist/leaflet.js"></script>
+    <!--<script type="text/javascript" src="{{url_for('static', filename='add.js')}}"></script> -->
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
+</head>
+
+<body>
+    <form id="hike_search" action="/search/advanced" method="post">
+        <p><b>Search Criteria:</b></p>
+        Min Difficulty: (not)<input type="range" name ="min_difficulty" min="1" max="5" value="1">(very; 1 if you don't care)<br>
+        Max Difficulty: (not)<input type="range" name ="max_difficulty" min="1" max="5" value="5">(very; 5 if you don't care)<br>
+        Min Distance: <input type="number" name ="min_distance" min="0" max="50" step="0.5" value="0">(miles; 0 if you don't care)<br>
+        Max Distance: <input type="number" name ="max_distance" min="0" max="50" step="0.5" value="50">(miles; 50 if you don't care)<br>
+        Sun/Shade:
+        <input type="radio" name="sun_shade" value="sun"> Sun
+        <input type="radio" name="sun_shade" value="mixed"> Mixed
+        <input type="radio" name="sun_shade" value="shade"> Shade
+        <input type="radio" name="sun_shade" value="don't care" checked> don't care
+        <br>
+        <input type="checkbox" name="markings" value="markings"> Must be well marked
+
+        <p><b>Additional Criteria:</b></p>
+        <table>
+            <tr><th>Surrounding Biome: </th><td>yes</td><td>no</td><td>don't care</td></tr>
+            {%for biome in biomes%}
+            <tr>
+                <td>
+                    {{biome[1]}}
+                </td>
+                <td>
+                    <input type="radio" name={{biome[0]}} value="yes">
+                </td>
+                <td>
+                    <input type="radio" name={{biome[0]}} value="no">
+                </td>
+                <td>
+                    <input type="radio" name={{biome[0]}} value="don't care" checked>
+                </td>
+            </tr>
+            {%endfor%}
+            <tr></tr>
+            <tr></tr>
+            <tr><td></td></tr>
+            <tr><th align="left">Elevation:</th><td>yes</td><td>no</td><td>don't care</td></tr>
+            {%for elevation in elevations%}
+            <tr>
+                <td>
+                    {{elevation[1]}}
+                </td>
+                <td>
+                    <input type="radio" name={{elevation[0]}} value="yes">
+                </td>
+                <td>
+                    <input type="radio" name={{elevation[0]}} value="no">
+                </td>
+                <td>
+                    <input type="radio" name={{elevation[0]}} value="don't care" checked>
+                </td>
+            </tr>
+            {%endfor%}
+            <tr></tr>
+            <tr></tr>
+            <tr><td></td></tr>
+            <tr><th align="left">Trail Terrain:</th><td>yes</td><td>no</td><td>don't care</td></tr>
+            {%for terrain in terrains%}
+            <tr>
+                <td>
+                    {{terrain[1]}}
+                </td>
+                <td>
+                    <input type="radio" name={{terrain[0]}} value="yes">
+                </td>
+                <td>
+                    <input type="radio" name={{terrain[0]}} value="no">
+                </td>
+                <td>
+                    <input type="radio" name={{terrain[0]}} value="don't care" checked>
+                </td>
+            </tr>
+            {%endfor%}
+        </table>
+        <input type="submit">
+    </form>
+
+<script>
+
+</script>
+</body>
+</html>
+
+

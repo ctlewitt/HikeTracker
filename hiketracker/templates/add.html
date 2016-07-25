@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hike to Add</title>
+    <script src="https://code.jquery.com/jquery-3.0.0.js" integrity="sha256-jrPLZ+8vDxt2FnE1zvZXCkCcebI/C8Dt5xyaQBjxQIo=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://npmcdn.com/leaflet@0.7.7/dist/leaflet.css" />
+    <script src="https://npmcdn.com/leaflet@0.7.7/dist/leaflet.js"></script>
+
+    <!--<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+    <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='add.js')}}"></script>-->
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
+
+
+</head>
+<body>
+    <form id="hike_info">
+        <div id="mapid"></div>
+        <!--Your Name: <input type="text" name="user_name"><br>-->
+        Trail Name: <input type="text" name="trail_name"><br>
+        Difficulty: (not)<input type="range" name ="difficulty" min="1" max="5">(very)<br>
+        Sun/Shade:
+        <input type="radio" name="sun_shade" value="sun"> Sun
+        <input type="radio" name="sun_shade" value="mixed"> Mixed
+        <input type="radio" name="sun_shade" value="shade"> Shade
+        <br>
+        Surrounding Biome: <!--what is the environment like--><br>
+        <select name="surrounding_biome" multiple>
+            <option value="rocky">Rocky</option>
+            <option value="marsh">Marsh</option>
+            <option value="grassy">Grassy</option>
+            <option value="river">River/Creek</option>
+            <option value="wooded">Wooded</option>
+            <option value="near_water">Near Water</option>
+            <option value="mountain">Mountain</option>
+            <option value="desert">Desert</option>
+            <option value="view">Has a view</option>
+        </select>
+        <br>
+        Elevation:<br>
+        <select name="elevation" multiple>
+            <option value="flat">Flat</option>
+            <option value="hilly">Hilly</option>
+            <option value="mountains">Mountains</option>
+            <option value="gradual_up">Gradual Uphill</option>
+            <option value="steep_up">Steep Uphill</option>
+            <option value="gradual_down">Gradual Downhill</option>
+            <option value="steep_down">Steep Downhill</option>
+        </select>
+        <br>
+        Trail Terrain: <!--what is the trail made of--><br>
+        <select name="trail_terrain" multiple>
+            <option value="rocky">Rocky</option>
+            <option value="boulders">Boulder</option>
+            <option value="sandy">Sandy</option>
+            <option value="overgrown">HighGrass</option>
+            <option value="water_crossings">WaterCrossings</option>
+            <option value="paved">Paved</option>
+            <option value="trail">Dirt Trail</option>
+            <option value="bushwacking">No Trail/Bushwacking</option>
+        </select>
+        <br>
+        Markings:
+        <input type="radio" name="markings" value="well_marked"> Well Marked
+        <input type="radio" name="markings" value="poorly_marked"> Poorly/Un-Marked
+        <input type="radio" name="markings" value="n_a"> N/A (not a trail)
+        <br>
+        <input type="submit">
+    </form>
+    <div id="response"><p></p></div>
+
+<script>
+
+ var mymap = L.map('mapid').setView({{curr_latlng|tojson}}, 13); <!--//[39.0, -76.877]-->
+
+    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+        maxZoom: 18,
+        id: '{{config.MAPBOX_ID}}',
+        accessToken: '{{config.MAPBOX_TOKEN}}',
+    }).addTo(mymap);
+
+var hike = L.polyline([]);
+function onMapClick(e) {
+    hike.addLatLng(e.latlng);
+    hike.addTo(mymap);
+}
+
+mymap.on('click', onMapClick);
+
+$("#hike_info").submit(function(e){
+   console.log("I am in the hike_info submit function!");
+   e.preventDefault();
+   var hike_coords = hike.getLatLngs();
+
+   var data = $("#hike_info").serialize() + "&" + $.param({ hike_coordinates: JSON.stringify(hike_coords) });
+   jQuery.post("/add",
+        data,
+        function(response){
+            $("#response").text(response);
+            console.log(response);
+        })
+        .fail(function(XMLHttpRequest, textStatus, errorThrown){
+            $("#response").html(XMLHttpRequest.responseText);
+        });
+});
+
+</script>
+</body>
+</html>
+

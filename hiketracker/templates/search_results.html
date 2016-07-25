@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Results</title>
+    <script src="https://code.jquery.com/jquery-3.0.0.js" integrity="sha256-jrPLZ+8vDxt2FnE1zvZXCkCcebI/C8Dt5xyaQBjxQIo=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://npmcdn.com/leaflet@0.7.7/dist/leaflet.css" />
+    <script src="https://npmcdn.com/leaflet@0.7.7/dist/leaflet.js"></script>
+
+    <!--<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+    <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>-->
+    <!--<script type="text/javascript" src="{{url_for('static', filename='add.js')}}"></script> -->
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
+</head>
+
+<body>
+    <div id="mapid"></div>
+    <p>Search Results:</p>
+    <div class="scrollable">
+        <ul>
+            {%for index in range(hikes|length)%}
+                <!--hike = {{hikes[index]}}-->
+                <li><a href="javascript:;" onclick="rezoom_map({{hikes[index].path_arr}})" style="color:{{colors[index]}}">{{hikes[index].name}}</a>
+                    <ul>
+                        <li>Submitted by: {{hikes[index].user.name}}</li>
+                        <li>Difficulty: {{hikes[index].difficulty}}</li>
+                        <li>Sun Exposure: {{hikes[index].sun_shade}}</li>
+                        <li>Surrounding Biomes: {{hikes[index].surrounding_biome}}</li>
+                        <li>Elevation: {{hikes[index].elevation}}</li>
+                        <li>Terrain: {{hikes[index].trail_terrain}}</li>
+                        <li>Markings: {{hikes[index].markings}}</li>
+                        <li>Path: {{hikes[index].path_arr}}</li>
+
+                    </ul>
+                </li>
+            {%endfor%}
+        </ul>
+    </div>
+
+
+</body>
+
+
+
+
+<script>
+{%if hikes|length == 0%}
+ var mymap = L.map('mapid').setView({{curr_latlng|tojson}}, 13);
+{%else%}
+ var mymap = L.map('mapid').setView({{hikes[0].path_arr[0]|tojson}}, 13);
+{%endif%}
+
+    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+        maxZoom: 18,
+        id: '{{config.MAPBOX_ID}}',
+        accessToken: '{{config.MAPBOX_TOKEN}}'
+    }).addTo(mymap);
+
+
+{%for index in range(hikes|length)%}
+    var path = L.polyline({{hikes[index].path_arr|tojson}}, {color: '{{colors[index]}}' });
+    path.addTo(mymap);
+{%endfor%}
+
+
+//contract map around first hike
+
+mymap.fitBounds(L.polyline({{hikes[0].path_arr|tojson}}).getBounds());
+
+
+function rezoom_map(path_arr){
+    mymap.fitBounds(L.polyline(path_arr).getBounds());
+}
+
+
+
+</script>
+
+</html>
+

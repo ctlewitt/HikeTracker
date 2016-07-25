@@ -1,0 +1,8 @@
+*.py[cod]
+temp.py
+run_hiketracker.sh
+*~
+.idea/
+venv/
+hiketracker/settings.py
+hiketracker/static/add.js
