@@ -6,6 +6,9 @@
 # search by hike name
 # fix searches so you're just getting some results
 
+# in login_followup() might not need to do email == submitted_email comparison
+# in next_is_valid() need to fix security bug
+# in login_followup() possible security issue: can a user use curl to change the user's email address in the request?
 
 
 #notes:
