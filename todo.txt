@@ -1,4 +1,7 @@
 # improve the readme
+# add "add/near/<lat_lng>" route so users can easily add a route near a location without having to drag the map around
+# add: make first point in hike visible when users add trails
+# add: make points removable when adding hikes
 
 # make a page just to search for trails by name
 # let users say what hikes they've hiked
