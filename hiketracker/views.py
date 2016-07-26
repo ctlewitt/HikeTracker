@@ -12,8 +12,7 @@ import flask_login
 from hiketracker.utils import (get_curr_loc, get_color_list, latlngarr_to_linestring, linestring_to_latlngarr,
                                latlng_to_point, miles_to_units, url_latlng_to_point, url_latlng_to_dict, units_to_miles,
                                pair_to_latlng, latlng_to_pair)
-from hiketracker.app import app, engine, Session #, mail, login_manager
-import requests
+from hiketracker.app import app, Session
 
 MAX_RESULTS = 10
 
