@@ -13,12 +13,9 @@ from hiketracker.utils import (get_curr_loc, get_color_list, latlngarr_to_linest
                                latlng_to_point, miles_to_units, url_latlng_to_point, url_latlng_to_dict, units_to_miles,
                                pair_to_latlng, latlng_to_pair)
 from hiketracker.app import app, engine, Session #, mail, login_manager
-
+import requests
 
 MAX_RESULTS = 10
-
-
-
 
 
 # user loader for flask-login
@@ -57,23 +54,28 @@ def email_me():
     return "Email sent!!"
 
 
-
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    next = request.args.get('next') or ""
     if request.method == 'GET':
-        next = request.args.get('next') or ""
         return '''
 
             <form action = "login?next='''+next+'''" method='POST'>
-            <input type = 'text' name='email' id='email' placeholder='email'></input>
+            <input type = 'text' name='email' id='email' placeholder='email'></input><br>
             <input type = 'submit' name='submit' value='Email Password'></input>
             </form>
+            <span style='font-family: ariel, sans-serif; font-size: 12px'>New User?</span>
             <form action = "new_user?next='''+next+'''" method='GET'>
-            <input type = 'submit' name='submit' value='New User'></input>
+            <input type = 'submit' name='submit' value='Create new account'></input>
             </form>
             '''
     # POST
+    # directed here from create new user, therefore form has name attribute
+    if request.form.get("name"):
+        session = Session()
+        session.add(User(name=request.form["name"], email=request.form["email"]))
+        session.commit()
+    # send user an email with their password in it
     session = Session()
     user = session.query(User).filter_by(email=request.form["email"]).first()
     if user:
@@ -84,7 +86,6 @@ def login():
         user.password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
         # Note: password_time updates automatically when this is updated
         session.commit()
-
         msg = Message(
 
             sender=app.config.get('MAIL_USERNAME'),
@@ -100,8 +101,6 @@ def login():
         The Hiker Trackers'''
         app.mail.send(msg)
 
-        next = request.args.get('next')
-
         return '''
             <form action = "login_followup?next='''+next+'''" method='POST'>
             <input type = 'hidden' name='email' id='email' value="''' + user.email + '''">
@@ -114,7 +113,6 @@ def login():
         return redirect(url_for('login'), 'GET')
 
 
-# NOTE: security issue: can a user use curl to change the user's email address in the request?
 @app.route('/login_followup', methods=['POST'])
 def login_followup():
     submitted_password = request.form['password']
@@ -124,8 +122,8 @@ def login_followup():
     if (user and user.email == submitted_email
         and bcrypt.checkpw(submitted_password.encode('utf-8'), user.password)
         and (datetime.datetime.now() - user.password_time).total_seconds() < 60*3): #three minutes
+            flask_login.logout_user()
             flask_login.login_user(user)
-            #do I need to add: user.is_authenticated = True
             flash("You've been logged in")
             next = request.args.get('next')
             if not next_is_valid(next):
@@ -139,19 +137,12 @@ def add_new_user():
     next = request.args.get('next') or ""
     if request.method == 'GET':
         return '''
-            <form action = "new_user?next='''+next+'''" method = 'POST' >
-                <input type = 'text' name = 'name' id = 'name' placeholder = 'name' > < / input >
-                <input type = 'text' name = 'email' id = 'email' placeholder = 'email' > < / input >
-                < input type = 'submit' name = 'submit' value = 'Email Password' > < / input >
+            <form action = "login?next='''+next+'''" method = 'POST' >
+                <input type = 'text' name = 'name' id = 'name' placeholder = 'name' > </input >
+                <input type = 'text' name = 'email' id = 'email' placeholder = 'email' > </input >
+                <input type = 'submit' name = 'submit' value = 'Add User' > </input>
             </form >
         '''
-    else: # POST
-        next = request.args.get('next') or ""
-        session = Session()
-        session.add(User(name=request.form["name"], email=request.form["email"]))
-        session.commit()
-        return redirect(url_for('login?next='+next))
-
 
 
 @app.route('/logout')
