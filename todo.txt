@@ -1,3 +1,5 @@
+# improve the readme
+
 # make a page just to search for trails by name
 # let users say what hikes they've hiked
 # let users make hiking wish lists
