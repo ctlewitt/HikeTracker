@@ -3,6 +3,10 @@
 # add: make first point in hike visible when users add trails
 # add: make points removable when adding hikes
 
+# make the list of hikes resulting from search prettier
+## remove lat-lng list, possibly
+## state enums more cleanly (not Terrain.rocky, Terrain.watercrossings, e.g.)
+
 # make a page just to search for trails by name
 # let users say what hikes they've hiked
 # let users make hiking wish lists
