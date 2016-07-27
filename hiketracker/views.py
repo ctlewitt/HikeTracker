@@ -164,6 +164,7 @@ def test_logged_in():
 @flask_login.login_required
 def add_trail():
     if request.method == 'GET':
+        print("IP ADDRESS: " + request.remote_addr)
         curr_latlng = get_curr_loc(request.remote_addr) # dict
         return render_template('add.html', curr_latlng=curr_latlng)
     else: # POST

@@ -3,6 +3,8 @@
 # add: make first point in hike visible when users add trails
 # add: make points removable when adding hikes
 
+# add biome: urban for urban hikes
+
 # make the list of hikes resulting from search prettier
 ## remove lat-lng list, possibly
 ## state enums more cleanly (not Terrain.rocky, Terrain.watercrossings, e.g.)
