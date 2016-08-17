@@ -9,7 +9,7 @@ import datetime
 import os
 from hiketracker.models import Hike, User
 import flask_login
-from hiketracker.utils import (get_curr_loc, get_color_list, latlngarr_to_linestring, linestring_to_latlngarr,
+from hiketracker.utils import (get_ip_addr, get_curr_loc, get_color_list, latlngarr_to_linestring, linestring_to_latlngarr,
                                latlng_to_point, miles_to_units, url_latlng_to_point, url_latlng_to_dict, units_to_miles,
                                pair_to_latlng, latlng_to_pair)
 from hiketracker.app import app, Session
@@ -23,6 +23,7 @@ def user_loader(user_id):
     session = Session()
     user = session.query(User).filter_by(id=user_id).first()
     return user # should be None if user not in database
+
 
 # login_manager for flask
 @app.login_manager.request_loader
@@ -164,8 +165,8 @@ def test_logged_in():
 @flask_login.login_required
 def add_trail():
     if request.method == 'GET':
-        print("IP ADDRESS: " + request.remote_addr)
-        curr_latlng = get_curr_loc(request.remote_addr) # dict
+        ip_addr = get_ip_addr(request)
+        curr_latlng = get_curr_loc(ip_addr) # dict
         return render_template('add.html', curr_latlng=curr_latlng)
     else: # POST
         session = Session()
@@ -213,7 +214,8 @@ def advanced_search():
         return render_template('search.html', biomes=biomes, elevations=elevations, terrains=terrains)
     else:  # POST
         # get location from IP address
-        curr_latlng = get_curr_loc(request.remote_addr)
+        ip_addr = get_ip_addr(request)
+        curr_latlng = get_curr_loc(ip_addr)
         curr_latlng_point = latlng_to_point(curr_latlng)
 
         session = Session()
@@ -275,7 +277,8 @@ def get_paths_bylength(min_max, length):
     session = Session()
 
     # get user's latlng
-    curr_latlng = get_curr_loc(request.remote_addr)
+    ip_addr = get_ip_addr(request)
+    curr_latlng = get_curr_loc(ip_addr)
     curr_latlng_point = latlng_to_point(curr_latlng)
     length_in_units = miles_to_units(float(length))
     initial_query = session.query(Hike, Hike.path.ST_AsText())
@@ -307,7 +310,8 @@ def get_paths_bylength(min_max, length):
 @flask_login.login_required
 def get_paths_by_user(username):
     # get current location of user
-    curr_latlng = get_curr_loc(request.remote_addr)
+    ip_addr = get_ip_addr(request)
+    curr_latlng = get_curr_loc(ip_addr)
     curr_latlng_point = latlng_to_point(curr_latlng)
     # search database for paths entered by username
     session = Session()
@@ -332,7 +336,8 @@ def get_paths_by_user(username):
 @flask_login.login_required
 def get_my_paths():
     # get current location of user
-    curr_latlng = get_curr_loc(request.remote_addr)
+    ip_addr = get_ip_addr(request)
+    curr_latlng = get_curr_loc(ip_addr)
     curr_latlng_point = latlng_to_point(curr_latlng)
     # search database for paths entered by username
     session = Session()
@@ -382,7 +387,8 @@ def get_paths_by_location(latlng):
 @flask_login.login_required
 def get_paths_by_intersection(hike_name):
     # search database for paths by length
-    curr_latlng = get_curr_loc(request.remote_addr)
+    ip_addr = get_ip_addr(request)
+    curr_latlng = get_curr_loc(ip_addr)
     curr_latlng_point = latlng_to_point(curr_latlng)
     session = Session()
     try:

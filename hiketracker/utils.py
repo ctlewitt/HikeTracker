@@ -3,8 +3,20 @@ from geolite2 import geolite2
 import string
 import random
 
+
+def get_ip_addr(request):
+    try:
+        return request.headers["X_FORWARDED_FOR"].split(",")[-1].strip()
+    except KeyError:
+        try:
+            return request.headers["REMOTE_ADDR"]
+        except KeyError:
+            return request.remote_addr
+
+
 def get_curr_loc(ip_address):
     reader = geolite2.reader()
+    print(reader)
     curr_loc = reader.get(ip_address)
     if curr_loc:
         return {'lat': curr_loc['location']['latitude'], 'lng': curr_loc['location']['longitude']}
