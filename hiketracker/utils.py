@@ -9,7 +9,7 @@ def get_ip_addr(request):
     if not ip:
         return request.remote_addr
     else:
-        return ip[0]
+        return ip[-1]
     # try:
     #     return request.headers["HTTP_X_REAL_IP"].split(",")[0].strip()
     # except KeyError:
