@@ -6,7 +6,8 @@ import random
 
 def get_ip_addr(request):
     try:
-        return request.headers["X_FORWARDED_FOR"].split(",")[0].strip()
+        return "8.8.8.8"
+        # return request.headers["X_FORWARDED_FOR"].split(",")[0].strip()
     except KeyError:
         try:
             return "8.8.8.8"
