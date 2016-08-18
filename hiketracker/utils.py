@@ -6,12 +6,12 @@ import random
 
 def get_ip_addr(request):
     try:
-        return "8.8.8.8"
-        # return request.headers["X_FORWARDED_FOR"].split(",")[0].strip()
+
+        return request.headers["X_FORWARDED_FOR"].split(",")[1].strip()
     except KeyError:
         try:
             return "8.8.8.8"
-            # return request.headers["REMOTE_ADDR"]
+            return request.headers["REMOTE_ADDR"]
         except KeyError:
             return request.remote_addr
 
