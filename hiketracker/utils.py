@@ -5,11 +5,17 @@ import random
 
 
 def get_ip_addr(request):
-    ip = request.headers.getlist("X_FORWARDED_FOR")
-    if not ip:
-        return request.remote_addr
+    if 'HTTP_X_FORWARDED_FOR' in request.META:
+        ip_adds = request.META['HTTP_FORWARDED_FOR'].split(",")
+        ip = ip_adds[0]
     else:
-        return ip[-1]
+        ip = request.META['REMOTE_ADDR']
+    return ip
+    # ip = request.headers.getlist("X_FORWARDED_FOR")
+    # if not ip:
+    #     return request.remote_addr
+    # else:
+    #     return ip[-1]
     # try:
     #     return request.headers["HTTP_X_REAL_IP"].split(",")[0].strip()
     # except KeyError:
@@ -18,6 +24,7 @@ def get_ip_addr(request):
     #     except KeyError:
     #         return request.ip
     #         #return request.remote_addr
+
 
 
 def get_curr_loc(ip_address):
