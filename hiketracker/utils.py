@@ -5,7 +5,7 @@ import random
 
 
 def get_ip_addr(request):
-    ip = request.headers.getlist("X-Forwarded-For")
+    ip = request.headers.getlist("X_FORWARDED_FOR")
     if not ip:
         return request.remote_addr
     else:
