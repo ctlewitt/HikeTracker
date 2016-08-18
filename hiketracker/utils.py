@@ -5,11 +5,12 @@ import random
 
 
 def get_ip_addr(request):
-    if 'HTTP_X_FORWARDED_FOR' in request.META:
-        ip_adds = request.META['HTTP_FORWARDED_FOR'].split(",")
-        ip = ip_adds[0]
-    else:
-        ip = request.META['REMOTE_ADDR']
+    # if 'HTTP_X_FORWARDED_FOR' in request.META:
+    #     ip_adds = request.META['HTTP_FORWARDED_FOR'].split(",")
+    #     ip = ip_adds[0]
+    # else:
+    #     ip = request.META['REMOTE_ADDR']
+    ip = "8.8.8.8"
     return ip
     # ip = request.headers.getlist("X_FORWARDED_FOR")
     # if not ip:
