@@ -9,7 +9,8 @@ def get_ip_addr(request):
         return request.headers["X_FORWARDED_FOR"].split(",")[0].strip()
     except KeyError:
         try:
-            return request.headers["REMOTE_ADDR"]
+            return "8.8.8.8"
+            # return request.headers["REMOTE_ADDR"]
         except KeyError:
             return request.remote_addr
 
