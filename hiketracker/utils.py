@@ -11,7 +11,8 @@ def get_ip_addr(request):
         try:
             return request.headers["REMOTE_ADDR"]
         except KeyError:
-            return request.remote_addr
+            return request.ip
+            #return request.remote_addr
 
 
 def get_curr_loc(ip_address):
