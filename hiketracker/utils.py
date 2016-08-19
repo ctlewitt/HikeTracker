@@ -18,13 +18,22 @@ def get_ip_addr(request):
     # else:
     #     return ip[-1]
     try:
-        return request.headers["HTTP_X_REAL_IP"].split(",")[0].strip()
-    except KeyError:
+        return request.META['HTTP_FORWARDED_FOR'].split(",")[0]
+    except (AttributeError, KeyError):
         try:
-            return request.headers["REMOTE_ADDR"]
-        except KeyError:
-            #return request.ip
+            return request.META['REMOTE_ADDR']
+        except (AttributeError, KeyError):
             return request.remote_addr
+
+    #
+    # try:
+    #     return request.headers["HTTP_X_REAL_IP"].split(",")[0].strip()
+    # except KeyError:
+    #     try:
+    #         return request.headers["REMOTE_ADDR"]
+    #     except KeyError:
+    #         #return request.ip
+    #         return request.remote_addr
 
 
 
