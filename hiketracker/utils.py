@@ -20,7 +20,7 @@ def get_ip_addr(request):
     for key in request.headers.keys():
         print(key)
     try:
-        return request.headers['X_FORWARDED_FOR'].split(",").strip()[0]
+        return request.headers['X_FORWARDED_FOR'].strip().split(",")[0]
     except KeyError:
         try:
             return request.headers['REMOTE_ADDR']
