@@ -17,13 +17,16 @@ def get_ip_addr(request):
     #     return request.remote_addr
     # else:
     #     return ip[-1]
+    for key in request.headers.keys():
+        print(key)
     try:
         return request.headers['HTTP_FORWARDED_FOR'].split(",").strip()[0]
     except KeyError:
         try:
             return request.headers['REMOTE_ADDR']
         except KeyError:
-            return request.remote_addr
+            #return request.remote_addr
+            return "8.8.8.8"
 
     #
     # try:
@@ -39,7 +42,6 @@ def get_ip_addr(request):
 
 def get_curr_loc(ip_address):
     reader = geolite2.reader()
-    print(reader)
     curr_loc = reader.get(ip_address)
     if curr_loc:
         return {'lat': curr_loc['location']['latitude'], 'lng': curr_loc['location']['longitude']}
