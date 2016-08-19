@@ -10,21 +10,21 @@ def get_ip_addr(request):
     #     ip = ip_adds[0]
     # else:
     #     ip = request.META['REMOTE_ADDR']
-    ip = "8.8.8.8"
-    return ip
+    # ip = "100.15.116.245"
+    # return ip
     # ip = request.headers.getlist("X_FORWARDED_FOR")
     # if not ip:
     #     return request.remote_addr
     # else:
     #     return ip[-1]
-    # try:
-    #     return request.headers["HTTP_X_REAL_IP"].split(",")[0].strip()
-    # except KeyError:
-    #     try:
-    #         return request.headers["REMOTE_ADDR"]
-    #     except KeyError:
-    #         return request.ip
-    #         #return request.remote_addr
+    try:
+        return request.headers["HTTP_X_REAL_IP"].split(",")[0].strip()
+    except KeyError:
+        try:
+            return request.headers["REMOTE_ADDR"]
+        except KeyError:
+            #return request.ip
+            return request.remote_addr
 
 
 
