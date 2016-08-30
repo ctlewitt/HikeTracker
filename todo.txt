@@ -1,3 +1,7 @@
+# if user enters email for new (non-existant) user, indicate that if they are a new user they need to create an account in some way
+# -- could redirect to create new user account
+
+
 # improve the readme
 # add "add/near/<lat_lng>" route so users can easily add a route near a location without having to drag the map around
 # add: make first point in hike visible when users add trails
@@ -33,3 +37,4 @@
 
 
 # move API user and password to config variables in flask
+

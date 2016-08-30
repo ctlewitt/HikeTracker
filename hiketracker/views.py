@@ -113,6 +113,12 @@ def login():
         return redirect(url_for('login'), 'GET')
 
 
+@app.route('/test')
+def test():
+    return redirect('/', 'GET'), "200 OK"
+    return redirect('/', 'GET'), "200 OK"
+
+
 @app.route('/login_followup', methods=['POST'])
 def login_followup():
     submitted_password = request.form['password']
