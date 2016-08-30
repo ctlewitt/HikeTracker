@@ -110,12 +110,7 @@ def login():
             '''
     else: # invalid email
         flash('invalid email')
-        return redirect(url_for('login'), 'GET')
-
-
-@app.route('/test')
-def test():
-    return redirect('/', 'GET'), "200 OK"
+        return redirect(url_for('login'))
 
 
 @app.route('/login_followup', methods=['POST'])
@@ -136,6 +131,9 @@ def login_followup():
             return redirect(next or url_for('test_logged_in'))
     return redirect(url_for('test_logged_in'))
 
+@app.route('/test')
+def test():
+    return redirect(url_for('hey_there'))
 
 @app.route('/new_user', methods=['GET', 'POST'])
 def add_new_user():
