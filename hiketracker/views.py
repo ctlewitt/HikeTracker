@@ -116,7 +116,6 @@ def login():
 @app.route('/test')
 def test():
     return redirect('/', 'GET'), "200 OK"
-    return redirect('/', 'GET'), "200 OK"
 
 
 @app.route('/login_followup', methods=['POST'])
